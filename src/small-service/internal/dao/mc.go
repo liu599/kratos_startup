@@ -13,11 +13,11 @@ import (
 //go:generate kratos tool genmc
 type _mc interface {
 	// mc: -key=keyArt -type=get
-	CacheArticle(c context.Context, id int64) (*model.Article, error)
+	CacheCardInfo(c context.Context, id int) (*model.CardInfo, error)
 	// mc: -key=keyArt -expire=d.demoExpire
-	AddCacheArticle(c context.Context, id int64, art *model.Article) (err error)
+	AddCacheCardInfo(c context.Context, id int, art *model.CardInfo) (err error)
 	// mc: -key=keyArt
-	DeleteArticleCache(c context.Context, id int64) (err error)
+	DeleteCardInfo(c context.Context, id int) (err error)
 }
 
 func NewMC() (mc *memcache.Memcache, cf func(), err error) {
@@ -43,6 +43,6 @@ func (d *dao) PingMC(ctx context.Context) (err error) {
 	return
 }
 
-func keyArt(id int64) string {
+func keyArt(id int) string {
 	return fmt.Sprintf("art_%d", id)
 }

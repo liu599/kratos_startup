@@ -6,8 +6,8 @@
   type Dao interface {
 		Close()
 		Ping(ctx context.Context) (err error)
-		// bts: -nullcache=&model.Article{RegId:-1} -check_null_code=$!=nil&&$.RegId==-1
-		Article(c context.Context, regId int64) (*model.Article, error)
+		// bts: -nullcache=&model.CardInfo{Wid:1} -check_null_code=$!=nil&&$.Wid==1
+		CardInfo(c context.Context, wid int) (*model.CardInfo, error)
 	}
 */
 
@@ -20,37 +20,37 @@ import (
 	"small-service/internal/model"
 )
 
-// Article get data from cache if miss will call source method, then add to cache.
-func (d *dao) Article(c context.Context, regId int64) (res *model.Article, err error) {
+// CardInfo get data from cache if miss will call source method, then add to cache.
+func (d *dao) CardInfo(c context.Context, wid int) (res *model.CardInfo, err error) {
 	addCache := true
-	res, err = d.CacheArticle(c, regId)
+	res, err = d.CacheCardInfo(c, wid)
 	if err != nil {
 		addCache = false
 		err = nil
 	}
 	defer func() {
-		if res != nil && res.RegId == -1 {
+		if res != nil && res.Wid == 1 {
 			res = nil
 		}
 	}()
 	if res != nil {
-		cache.MetricHits.Inc("bts:Article")
+		cache.MetricHits.Inc("bts:CardInfo")
 		return
 	}
-	cache.MetricMisses.Inc("bts:Article")
-	res, err = d.RawArticle(c, regId)
+	cache.MetricMisses.Inc("bts:CardInfo")
+	res, err = d.RawCardInfo(c, wid)
 	if err != nil {
 		return
 	}
 	miss := res
 	if miss == nil {
-		miss = &model.Article{RegId: -1}
+		miss = &model.CardInfo{Wid: 1}
 	}
 	if !addCache {
 		return
 	}
 	d.cache.Do(c, func(c context.Context) {
-		d.AddCacheArticle(c, regId, miss)
+		d.AddCacheCardInfo(c, wid, miss)
 	})
 	return
 }

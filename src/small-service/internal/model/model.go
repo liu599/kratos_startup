@@ -22,3 +22,27 @@ type Regression struct {
 	UpdatedAt time.Time
 	DeletedAt time.Time
 }
+type CardInfo struct {
+	Wid int
+	Wsid string
+	CardName string
+	CardCat string
+	Color string
+	Prop string
+	Rare string
+	Level int
+	Cost int
+	Judge int
+	Soul int
+	Attack int
+	Series string
+	Des1 string
+	Des2 string
+	Des3 string
+	Cover1 string
+	Cover2 string
+	Cover3 string
+	Rel1 string
+	Rel2 string
+	Cat string
+}

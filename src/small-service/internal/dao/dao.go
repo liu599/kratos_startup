@@ -22,8 +22,8 @@ var Provider = wire.NewSet(New, NewDB, NewRedis, NewMC)
 type Dao interface {
 	Close()
 	Ping(ctx context.Context) (err error)
-	// bts: -nullcache=&model.Article{RegId:-1} -check_null_code=$!=nil&&$.RegId==-1
-	Article(c context.Context, regId int64) (*model.Article, error)
+	// bts: -nullcache=&model.CardInfo{Wid:1} -check_null_code=$!=nil&&$.Wid==1
+	CardInfo(c context.Context, wid int) (*model.CardInfo, error)
 }
 
 // dao dao.
@@ -31,8 +31,8 @@ type dao struct {
 	db          *sql.DB
 	redis       *redis.Redis
 	mc          *memcache.Memcache
-	cache *fanout.Fanout
-	demoExpire int32
+	cache       *fanout.Fanout
+	demoExpire  int32
 }
 
 // Create a new dao and return.

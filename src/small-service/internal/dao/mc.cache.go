@@ -5,11 +5,11 @@
   It is generated from:
   type _mc interface {
 		// mc: -key=keyArt -type=get
-		CacheArticle(c context.Context, id int64) (*model.Article, error)
+		CacheCardInfo(c context.Context, id int) (*model.CardInfo, error)
 		// mc: -key=keyArt -expire=d.demoExpire
-		AddCacheArticle(c context.Context, id int64, art *model.Article) (err error)
+		AddCacheCardInfo(c context.Context, id int, art *model.CardInfo) (err error)
 		// mc: -key=keyArt
-		DeleteArticleCache(c context.Context, id int64) (err error)
+		DeleteCardInfo(c context.Context, id int) (err error)
 	}
 */
 
@@ -26,10 +26,11 @@ import (
 
 var _ _mc
 
-// CacheArticle get data from mc
-func (d *dao) CacheArticle(c context.Context, id int64) (res *model.Article, err error) {
+// CacheCardInfo get data from mc
+func (d *dao) CacheCardInfo(c context.Context, id int) (res *model.CardInfo, err error) {
 	key := keyArt(id)
-	res = &model.Article{}
+	fmt.Println(id, "create-Id")
+	res = &model.CardInfo{}
 	if err = d.mc.Get(c, key).Scan(res); err != nil {
 		res = nil
 		if err == memcache.ErrNotFound {
@@ -37,35 +38,35 @@ func (d *dao) CacheArticle(c context.Context, id int64) (res *model.Article, err
 		}
 	}
 	if err != nil {
-		log.Errorv(c, log.KV("CacheArticle", fmt.Sprintf("%+v", err)), log.KV("key", key))
+		log.Errorv(c, log.KV("CacheCardInfo", fmt.Sprintf("%+v", err)), log.KV("key", key))
 		return
 	}
 	return
 }
 
-// AddCacheArticle Set data to mc
-func (d *dao) AddCacheArticle(c context.Context, id int64, val *model.Article) (err error) {
+// AddCacheCardInfo Set data to mc
+func (d *dao) AddCacheCardInfo(c context.Context, id int, val *model.CardInfo) (err error) {
 	if val == nil {
 		return
 	}
 	key := keyArt(id)
 	item := &memcache.Item{Key: key, Object: val, Expiration: d.demoExpire, Flags: memcache.FlagJSON}
 	if err = d.mc.Set(c, item); err != nil {
-		log.Errorv(c, log.KV("AddCacheArticle", fmt.Sprintf("%+v", err)), log.KV("key", key))
+		log.Errorv(c, log.KV("AddCacheCardInfo", fmt.Sprintf("%+v", err)), log.KV("key", key))
 		return
 	}
 	return
 }
 
-// DeleteArticleCache delete data from mc
-func (d *dao) DeleteArticleCache(c context.Context, id int64) (err error) {
+// DeleteCardInfo delete data from mc
+func (d *dao) DeleteCardInfo(c context.Context, id int) (err error) {
 	key := keyArt(id)
 	if err = d.mc.Delete(c, key); err != nil {
 		if err == memcache.ErrNotFound {
 			err = nil
 			return
 		}
-		log.Errorv(c, log.KV("DeleteArticleCache", fmt.Sprintf("%+v", err)), log.KV("key", key))
+		log.Errorv(c, log.KV("DeleteCardInfo", fmt.Sprintf("%+v", err)), log.KV("key", key))
 		return
 	}
 	return

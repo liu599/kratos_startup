@@ -31,9 +31,42 @@ service Demo {
 }
 
 message HelloReq {
-  string name = 1 [(gogoproto.moretags) = 'form:"name" validate:"required"'];
+  string name = 1 [(gogoproto.moretags) = 'form:"name"'];
+  int32 number = 2 [(gogoproto.moretags) = 'form:"number" validate:"required"'];
 }
 
 message HelloResp {
   string Content = 1 [(gogoproto.jsontag) = 'content'];
+  repeated CardResp CardInfo=2 [(gogoproto.jsontag) = 'data'];
+}
+
+enum CardColor {
+  RED = 0;
+  GREEN = 1;
+  BLUE = 2;
+  YELLOW = 3;
+}
+message CardResp {
+  int32 wid = 1;
+  string wsid = 2;
+  string cardname = 3;
+  string cardcat = 4;
+  string cardcolor = 5;
+  string prop = 6;
+  string rare = 7;
+  int32 level = 8;
+  int32 cost = 9;
+  int32 judge = 10;
+  int32 soul = 11;
+  int32 attack = 12;
+  string series = 13;
+  string des1 = 14;
+  string des2 = 15;
+  string des3 = 16;
+  string cover1 = 17;
+  string cover2 = 18;
+  string cover3 = 19;
+  string rel1 = 20;
+  string rel2 = 21;
+  string cat = 22;
 }
