@@ -33,3 +33,5 @@ tool/kratos/protobuf/protoc-gen-bswagger/protoc-gen-bswagger
 pkg/
 /src/testing-service/configs/my*.toml
 /src/testing-service/vendor/
+/src/kratos-1.0.0/
+/src/small-service/configs/my-db.toml

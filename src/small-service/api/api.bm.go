@@ -18,7 +18,7 @@ import (
 	bm "github.com/go-kratos/kratos/pkg/net/http/blademaster"
 	"github.com/go-kratos/kratos/pkg/net/http/blademaster/binding"
 )
-import google_protobuf1 "github.com/golang/protobuf/ptypes/empty"
+import google_protobuf1 "google.golang.org/protobuf/types/known/emptypb"
 
 // to suppressed 'imported but not used warning'
 var _ *bm.Context

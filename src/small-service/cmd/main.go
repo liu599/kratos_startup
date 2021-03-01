@@ -7,9 +7,9 @@ import (
 	"syscall"
 	"time"
 
-	"small-service/internal/di"
 	"github.com/go-kratos/kratos/pkg/conf/paladin"
 	"github.com/go-kratos/kratos/pkg/log"
+	"small-service/internal/di"
 )
 
 func main() {

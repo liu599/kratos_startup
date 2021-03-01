@@ -10,11 +10,11 @@ import (
 	fmt "fmt"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/golang/protobuf/proto"
-	empty "github.com/golang/protobuf/ptypes/empty"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	io "io"
 	math "math"
 	math_bits "math/bits"
@@ -157,8 +157,8 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type DemoClient interface {
-	Ping(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*empty.Empty, error)
-	SayHello(ctx context.Context, in *HelloReq, opts ...grpc.CallOption) (*empty.Empty, error)
+	Ping(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	SayHello(ctx context.Context, in *HelloReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	SayHelloURL(ctx context.Context, in *HelloReq, opts ...grpc.CallOption) (*HelloResp, error)
 	RequestItem(ctx context.Context, in *HelloReq, opts ...grpc.CallOption) (*HelloResp, error)
 }
@@ -171,8 +171,8 @@ func NewDemoClient(cc *grpc.ClientConn) DemoClient {
 	return &demoClient{cc}
 }
 
-func (c *demoClient) Ping(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*empty.Empty, error) {
-	out := new(empty.Empty)
+func (c *demoClient) Ping(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/demo.service.v1.Demo/Ping", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -180,8 +180,8 @@ func (c *demoClient) Ping(ctx context.Context, in *empty.Empty, opts ...grpc.Cal
 	return out, nil
 }
 
-func (c *demoClient) SayHello(ctx context.Context, in *HelloReq, opts ...grpc.CallOption) (*empty.Empty, error) {
-	out := new(empty.Empty)
+func (c *demoClient) SayHello(ctx context.Context, in *HelloReq, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/demo.service.v1.Demo/SayHello", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -209,8 +209,8 @@ func (c *demoClient) RequestItem(ctx context.Context, in *HelloReq, opts ...grpc
 
 // DemoServer is the server API for Demo service.
 type DemoServer interface {
-	Ping(context.Context, *empty.Empty) (*empty.Empty, error)
-	SayHello(context.Context, *HelloReq) (*empty.Empty, error)
+	Ping(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
+	SayHello(context.Context, *HelloReq) (*emptypb.Empty, error)
 	SayHelloURL(context.Context, *HelloReq) (*HelloResp, error)
 	RequestItem(context.Context, *HelloReq) (*HelloResp, error)
 }
@@ -219,10 +219,10 @@ type DemoServer interface {
 type UnimplementedDemoServer struct {
 }
 
-func (*UnimplementedDemoServer) Ping(ctx context.Context, req *empty.Empty) (*empty.Empty, error) {
+func (*UnimplementedDemoServer) Ping(ctx context.Context, req *emptypb.Empty) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
 }
-func (*UnimplementedDemoServer) SayHello(ctx context.Context, req *HelloReq) (*empty.Empty, error) {
+func (*UnimplementedDemoServer) SayHello(ctx context.Context, req *HelloReq) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SayHello not implemented")
 }
 func (*UnimplementedDemoServer) SayHelloURL(ctx context.Context, req *HelloReq) (*HelloResp, error) {
@@ -237,7 +237,7 @@ func RegisterDemoServer(s *grpc.Server, srv DemoServer) {
 }
 
 func _Demo_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(empty.Empty)
+	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -249,7 +249,7 @@ func _Demo_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface
 		FullMethod: "/demo.service.v1.Demo/Ping",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DemoServer).Ping(ctx, req.(*empty.Empty))
+		return srv.(DemoServer).Ping(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -517,10 +517,7 @@ func (m *HelloReq) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthApi
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthApi
 			}
 			if (iNdEx + skippy) > l {
@@ -603,10 +600,7 @@ func (m *HelloResp) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthApi
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthApi
 			}
 			if (iNdEx + skippy) > l {
